@@ -6,7 +6,7 @@ export const validateUser = (data) => {
   const isAllowed = mandatoryFiled.every((k) => Object.keys(data).includes(k));
 
   if (!isAllowed) {
-    throw new Error("Fields Missing");
+    throw new Error("All fields are required");
   }
 
   if (!validator.isEmail(data.email)) {

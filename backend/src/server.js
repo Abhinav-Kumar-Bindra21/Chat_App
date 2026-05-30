@@ -25,7 +25,7 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
+connectDb();
 app.listen(PORT, () => {
-  connectDb();
   console.log("Server is started");
 });

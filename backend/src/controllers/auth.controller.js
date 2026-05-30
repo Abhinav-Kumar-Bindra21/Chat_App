@@ -1,6 +1,7 @@
 import User from "../models/User.js";
-import { validateUser } from "./validator.js";
+import { validateUser } from "../utils/validator.js";
 import bcrybt from "bcrypt";
+import { generateToken } from "../utils/generateToken.js";
 
 export const signup = async (req, res) => {
   try {
@@ -27,15 +28,13 @@ export const signup = async (req, res) => {
       generateToken(newUser._id, res);
       await newUser.save();
 
-      res
-        .status(201)
-        .json({
-          success: true,
-          _id: newUser._id,
-          fullName: newUser.fullName,
-          email: newUser.email,
-          profilePic: newUser.profilePic,
-        });
+      res.status(201).json({
+        success: true,
+        _id: newUser._id,
+        fullName: newUser.fullName,
+        email: newUser.email,
+        profilePic: newUser.profilePic,
+      });
     } else {
       res.status(400).json({ success: false, message: "Invalid user data" });
     }
