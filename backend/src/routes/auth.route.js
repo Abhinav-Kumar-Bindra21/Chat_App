@@ -2,8 +2,6 @@ import express from "express";
 
 const authRouter = express.Router();
 
-authRouter.get("/", function (req, res) {
-  res.send("Hiii boss");
-});
+authRouter.post("/signup", signup);
 
 export default authRouter;

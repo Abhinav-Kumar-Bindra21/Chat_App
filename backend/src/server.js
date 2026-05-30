@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import authRouter from "./routes/auth.route.js";
 import path from "path";
+import { connectDb } from "./configs/db.js";
 
 dotenv.config();
 const app = express();
@@ -25,5 +26,6 @@ if (process.env.NODE_ENV === "production") {
 }
 
 app.listen(PORT, () => {
+  connectDb();
   console.log("Server is started");
 });
