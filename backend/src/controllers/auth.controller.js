@@ -51,3 +51,39 @@ export const signup = async (req, res) => {
     res.status(400).json({ success: false, message: error.message });
   }
 };
+
+export const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({ success: false, message: "All fields must be field" });
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ success: false, message: "Invaild Credentials" });
+    }
+
+    const isPassword = await bcrybt.compare(password, user.password);
+
+    if (!isPassword) {
+      return res.status(400).json({ success: false, message: "Invaild Credentials" });
+    }
+
+    generateToken(user._id, res);
+    res.status(200).json({
+      _id: user._id,
+      fullName: user.fullName,
+      email: user.email,
+      profilePic: user.profilePic,
+    });
+  } catch (error) {
+    return res.status(400).json({ success: false, message: error.message });
+  }
+};
+
+export const logout = (req, res) => {
+  res.cookie("jwt", "", { maxAge: 0 });
+  res.status(200).json({ message: false, message: "Logged out successfully" });
+};
