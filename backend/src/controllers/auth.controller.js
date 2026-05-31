@@ -3,6 +3,7 @@ import { validateUser } from "../utils/validator.js";
 import bcrybt from "bcrypt";
 import { generateToken } from "../utils/generateToken.js";
 import { sendWelcomeEmail } from "../emails/emailHandlers.js";
+import cloudinary from "../configs/cloudinary.js";
 
 export const signup = async (req, res) => {
   try {
@@ -86,4 +87,27 @@ export const login = async (req, res) => {
 export const logout = (req, res) => {
   res.cookie("jwt", "", { maxAge: 0 });
   res.status(200).json({ message: false, message: "Logged out successfully" });
+};
+
+export const updateProfile = async (req, res) => {
+  try {
+    const { profilePic } = req.body;
+
+    if (!profilePic) {
+      return res.status(400).json({ success: false, message: "Profile pic is required" });
+    }
+
+    const user = req.user._id;
+    const uploadResponse = await cloudinary.uploader(profilePic);
+
+    const updatedUser = await User.findByIdAndUpdate(userId, { profilePic: uploadResponse.secure_url }, { new: true });
+
+    res.status(200).json({ success: true, message: "Profile pic is updated", updateUser });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
+export const getUser = (req, res) => {
+  res.status(200).json(req.user);
 };
