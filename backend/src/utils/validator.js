@@ -1,9 +1,9 @@
 import validator from "validator";
 
 export const validateUser = (data) => {
-  const mandatoryFiled = ["fullName", "email", "password"];
+  const mandatoryFields = ["fullName", "email", "password"];
 
-  const isAllowed = mandatoryFiled.every((k) => Object.keys(data).includes(k));
+  const isAllowed = mandatoryFields.every((field) => data[field] && data[field].trim());
 
   if (!isAllowed) {
     throw new Error("All fields are required");
