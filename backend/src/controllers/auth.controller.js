@@ -97,8 +97,8 @@ export const updateProfile = async (req, res) => {
       return res.status(400).json({ success: false, message: "Profile pic is required" });
     }
 
-    const user = req.user._id;
-    const uploadResponse = await cloudinary.uploader(profilePic);
+    const userId = req.user._id;
+    const uploadResponse = await cloudinary.uploader.upload(profilePic);
 
     const updatedUser = await User.findByIdAndUpdate(
       userId,
@@ -106,7 +106,7 @@ export const updateProfile = async (req, res) => {
       { new: true },
     ).select("-password");
 
-    res.status(200).json({ success: true, message: "Profile pic is updated", updateUser });
+    res.status(200).json({ success: true, message: "Profile pic is updated", updatedUser });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }
