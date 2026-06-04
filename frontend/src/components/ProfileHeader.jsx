@@ -31,25 +31,24 @@ const ProfileHeader = () => {
         {/* LEFT SIDE */}
         <div className="flex items-center gap-3">
           {/* AVATAR */}
-          <div className="avatar online">
-            <button
-              className="size-14 rounded-full overflow-hidden relative group"
-              onClick={() => fileInputRef.current.click()}
-            >
-              {isUploading ? (
-                <Loader className="size-14 " />
-              ) : (
-                <img
-                  src={selectedImg || authUser.profilePic || "/avatar.png"}
-                  alt="User Image"
-                  className="size-full object-cover"
-                />
-              )}
+          <div className="avatar avatar-online">
+            <div className="w-14 rounded-full">
+              <button className="size-full overflow-hidden relative group" onClick={() => fileInputRef.current.click()}>
+                {isUploading ? (
+                  <Loader className="size-full" />
+                ) : (
+                  <img
+                    src={selectedImg || authUser.profilePic || "/avatar.png"}
+                    alt="User Image"
+                    className="size-full object-cover"
+                  />
+                )}
 
-              <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-                <span className="text-white text-xs">Change</span>
-              </div>
-            </button>
+                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                  <span className="text-white text-xs">Change</span>
+                </div>
+              </button>
+            </div>
 
             <input type="file" accept="image/*" ref={fileInputRef} onChange={handleImageUpload} className="hidden" />
           </div>
