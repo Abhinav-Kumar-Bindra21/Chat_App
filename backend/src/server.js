@@ -6,9 +6,10 @@ import { connectDb } from "./configs/db.js";
 import cookieParser from "cookie-parser";
 import messageRouter from "./routes/message.route.js";
 import cors from "cors";
+import { app, server } from "./configs/socket.js";
 
 dotenv.config();
-const app = express();
+
 const __dirname = path.resolve();
 
 app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
@@ -31,6 +32,6 @@ if (process.env.NODE_ENV === "production") {
 }
 
 connectDb();
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log("Server is started");
 });
