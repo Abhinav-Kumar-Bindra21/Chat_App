@@ -2,8 +2,9 @@ import User from "../models/User.js";
 import { validateUser } from "../utils/validator.js";
 import bcrybt from "bcrypt";
 import { generateToken } from "../utils/generateToken.js";
-import { sendWelcomeEmail } from "../emails/emailHandlers.js";
+import { sendVerificationEmail, sendWelcomeEmail } from "../emails/emailHandlers.js";
 import cloudinary from "../configs/cloudinary.js";
+import { generateVerificationCode } from "../utils/generateVerificationCode.js";
 
 export const signup = async (req, res) => {
   try {
@@ -19,11 +20,14 @@ export const signup = async (req, res) => {
 
     const salt = await bcrybt.genSalt(10);
     const hashedPassword = await bcrybt.hash(password, salt);
+    const verificationCode = generateVerificationCode();
 
     const newUser = new User({
       fullName,
       email,
       password: hashedPassword,
+      verificationToken: verificationCode,
+      verificationExpiresAt: Date.now() + 24 * 60 * 60 * 1000,
     });
 
     if (newUser) {
@@ -38,16 +42,44 @@ export const signup = async (req, res) => {
         profilePic: newUser.profilePic,
       });
 
-      //send a welcome email
+      //send a verification email
 
       try {
-        await sendWelcomeEmail(newUser.email, newUser.fullName, process.env.CLIENT_URL);
+        await sendVerificationEmail(newUser.email, newUser.verificationToken, process.env.CLIENT_URL);
       } catch (error) {
-        console.log("Failed to send welcome email:", error);
+        console.log("Failed to send verification email:", error);
       }
     } else {
       res.status(400).json({ success: false, message: "Invalid user data" });
     }
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
+export const verifyEmail = async (req, res) => {
+  const { code } = req.body;
+  try {
+    const user = await User.findOne({
+      verificationToken: code,
+      verificationExpiresAt: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res.status(400).json({ success: false, message: "Invalid or expired verification code" });
+    }
+
+    user.isVerified = true;
+    user.verificationToken = undefined;
+    user.verificationExpiresAt = undefined;
+
+    await user.save();
+
+    await sendWelcomeEmail(user.email, user.fullName, process.env.CLIENT_URL);
+
+    res
+      .status(200)
+      .json({ success: true, message: "Email verified successfully", user: { ...user._doc, password: undefined } });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }
