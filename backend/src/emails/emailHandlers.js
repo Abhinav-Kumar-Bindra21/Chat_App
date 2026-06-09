@@ -1,5 +1,10 @@
 import { resendClient, sender } from "../configs/resend.js";
-import { createWelcomeEmailTemplate, VERIFICATION_EMAIL_TEMPLATE } from "./emailTemplate.js";
+import {
+  createWelcomeEmailTemplate,
+  VERIFICATION_EMAIL_TEMPLATE,
+  PASSWORD_RESET_REQUEST_TEMPLATE,
+  PASSWORD_RESET_SUCCESS_TEMPLATE,
+} from "./emailTemplate.js";
 
 export const sendWelcomeEmail = async (email, name, clientURL) => {
   const { data, error } = await resendClient.emails.send({
@@ -32,5 +37,39 @@ export const sendVerificationEmail = async (email, verificationCode) => {
   }
 
   console.log("Verify Email sent successfully", data);
+  return data;
+};
+
+export const sendPasswordResetEmail = async (email, resetURL) => {
+  const { data, error } = await resendClient.emails.send({
+    from: `${sender.name} <${sender.email}>`,
+    to: email,
+    subject: "Reset Your Password",
+    html: PASSWORD_RESET_REQUEST_TEMPLATE.replace("{resetURL}", resetURL),
+  });
+
+  if (error) {
+    console.log("Error sending password reset email:");
+    throw new Error("Error sending password reset email");
+  }
+
+  console.log("Reset password Email sent successfully", data);
+  return data;
+};
+
+export const sendResetSuccessEmail = async (email) => {
+  const { data, error } = await resendClient.emails.send({
+    from: `${sender.name} <${sender.email}>`,
+    to: email,
+    subject: "Password Reset Successful",
+    html: PASSWORD_RESET_SUCCESS_TEMPLATE,
+  });
+
+  if (error) {
+    console.log("Error sending password reset success email: ");
+    throw new Error("Error sending password reset success email: ");
+  }
+
+  console.log("Reset password success Email sent successfully", data);
   return data;
 };
