@@ -59,7 +59,7 @@ export const VERIFICATION_EMAIL_TEMPLATE = `
 </head>
 <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #1E293B; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #F0F9FF;">
 
-  <div style=" background-color: #2563EB;; padding: 30px; text-align: center; border-radius: 12px 12px 0 0;">
+  <div style=" background-color: #2563EB; padding: 30px; text-align: center; border-radius: 12px 12px 0 0;">
     <h1 style="color: white; margin: 0; font-size: 28px;">
       Verify Your Email
     </h1>
@@ -109,7 +109,7 @@ export const VERIFICATION_EMAIL_TEMPLATE = `
 
     <p>
       Best regards,<br>
-      <strong>Your App Team</strong>
+      <strong>Your ChatApp Team</strong>
     </p>
 
   </div>
@@ -134,7 +134,7 @@ export const PASSWORD_RESET_SUCCESS_TEMPLATE = `
 </head>
 <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #1E293B; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #F0F9FF;">
 
-  <div style="background: linear-gradient(135deg, #2563EB, #60A5FA); padding: 30px; text-align: center; border-radius: 12px 12px 0 0;">
+  <div style="background-color: #2563EB; padding: 30px; text-align: center; border-radius: 12px 12px 0 0;">
     <h1 style="color: white; margin: 0; font-size: 28px;">
       Password Reset Successful
     </h1>
@@ -150,7 +150,7 @@ export const PASSWORD_RESET_SUCCESS_TEMPLATE = `
 
     <div style="text-align: center; margin: 35px 0;">
       <div style="
-        background: linear-gradient(135deg, #2563EB, #60A5FA);
+        background-color: #2563EB;
         color: white;
         width: 70px;
         height: 70px;
@@ -196,7 +196,7 @@ export const PASSWORD_RESET_SUCCESS_TEMPLATE = `
 
     <p>
       Best regards,<br>
-      <strong>Your App Team</strong>
+      <strong>Your ChatApp Team</strong>
     </p>
 
   </div>
@@ -221,7 +221,7 @@ export const PASSWORD_RESET_REQUEST_TEMPLATE = `
 </head>
 <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #1E293B; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #F0F9FF;">
 
-  <div style="background: linear-gradient(135deg, #2563EB, #60A5FA); padding: 30px; text-align: center; border-radius: 12px 12px 0 0;">
+  <div style="background-color: #2563EB; padding: 30px; text-align: center; border-radius: 12px 12px 0 0;">
     <h1 style="color: white; margin: 0; font-size: 28px;">
       Password Reset
     </h1>
@@ -250,7 +250,7 @@ export const PASSWORD_RESET_REQUEST_TEMPLATE = `
         href="{resetURL}"
         style="
           display: inline-block;
-          background: linear-gradient(135deg, #2563EB, #60A5FA);
+          background-color: #2563EB;
           color: white;
           padding: 14px 28px;
           text-decoration: none;
@@ -280,7 +280,7 @@ export const PASSWORD_RESET_REQUEST_TEMPLATE = `
 
     <p>
       Best regards,<br>
-      <strong>Your App Team</strong>
+      <strong>Your ChatApp Team</strong>
     </p>
 
   </div>

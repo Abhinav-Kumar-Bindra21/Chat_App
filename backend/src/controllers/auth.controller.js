@@ -2,9 +2,15 @@ import User from "../models/User.js";
 import { validateUser } from "../utils/validator.js";
 import bcrybt from "bcrypt";
 import { generateToken } from "../utils/generateToken.js";
-import { sendVerificationEmail, sendWelcomeEmail } from "../emails/emailHandlers.js";
+import {
+  sendVerificationEmail,
+  sendWelcomeEmail,
+  sendPasswordResetEmail,
+  sendResetSuccessEmail,
+} from "../emails/emailHandlers.js";
 import cloudinary from "../configs/cloudinary.js";
 import { generateVerificationCode } from "../utils/generateVerificationCode.js";
+import crypto from "crypto";
 
 export const signup = async (req, res) => {
   try {
@@ -146,4 +152,62 @@ export const updateProfile = async (req, res) => {
 
 export const getUser = (req, res) => {
   res.status(200).json(req.user);
+};
+
+export const forgotPassword = async (req, res) => {
+  const { email } = req.body;
+  try {
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(400).json({ success: false, message: "User not found" });
+    }
+
+    const resetToken = crypto.randomBytes(20).toString("hex");
+    const resetTokenExpiresAt = new Date(Date.now() + 1 * 60 * 60 * 1000); // 1 hours
+
+    user.resetPasswordToken = resetToken;
+    user.resetPasswordExpiresAt = resetTokenExpiresAt;
+
+    await user.save();
+
+    //send a forgot email
+    await sendPasswordResetEmail(user.email, `${process.env.CLIENT_URL}/reset-password/${resetToken}`);
+
+    res.status(200).json({ success: true, message: "Password reset link sent to your email" });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
+export const resetPassword = async (req, res) => {
+  try {
+    const { token } = req.params;
+    const { password } = req.body;
+
+    const user = await User.findOne({
+      resetPasswordToken: token,
+      resetPasswordExpiresAt: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res.status(400).json({ success: false, message: "Invalid or expired reset token" });
+    }
+
+    const salt = await bcrybt.genSalt(10);
+    const hashedPassword = await bcrybt.hash(password, salt);
+
+    user.password = hashedPassword;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpiresAt = undefined;
+    await user.save();
+
+    // Send resetpassword successfull email
+
+    await sendResetSuccessEmail(user.email);
+
+    res.status(200).json({ success: true, message: "Password reset successful" });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
 };
