@@ -64,6 +64,14 @@ const Signup = () => {
                     </div>
                   </div>
 
+                  {/* FORGOT PASSWORD INPUT */}
+
+                  <div className="flex items-center mb-6">
+                    <Link to={"/forgot-password"} className="text-cyan-400 hover:underline">
+                      Forgot password?
+                    </Link>
+                  </div>
+
                   {/* SUBMIT BUTTON */}
                   <button className="auth-btn" type="submit" disabled={isLogginIn}>
                     {isLogginIn ? <LoaderIcon className="w-full h-5 animate-spin text-center" /> : "Sign in"}
