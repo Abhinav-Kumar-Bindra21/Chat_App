@@ -13,6 +13,8 @@ export const useAuthStore = create((set, get) => ({
   isUploading: false,
   socket: null,
   onlineUsers: [],
+  isLoading: false,
+  error: null,
 
   checkAuth: async () => {
     try {
@@ -65,6 +67,19 @@ export const useAuthStore = create((set, get) => ({
       set({ authUser: null });
       toast.success("Logged out successfully ");
       get().disconnectSocket();
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message);
+    }
+  },
+
+  forgotPassword: async (email) => {
+    set({ isLoading: true });
+    try {
+      const res = await axiosInstance.post("/auth/forgot-password", { email });
+      set({ isLoading: false });
+      toast.success(res.data.message);
+      console.log(res.data);
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.message);

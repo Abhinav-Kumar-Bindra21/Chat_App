@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { Navigate } from "react-router";
 import Loader from "./components/Loader";
 import { Toaster } from "react-hot-toast";
+import { ForgotPassword } from "./pages/ForgotPassword";
 
 const App = () => {
   const { checkAuth, isCheckingAuth, authUser } = useAuthStore();
@@ -28,6 +29,7 @@ const App = () => {
         <Route path="/" element={authUser ? <ChatPage /> : <Navigate to={"/login"} />} />
         <Route path="/login" element={!authUser ? <Login /> : <Navigate to={"/"} />} />
         <Route path="/signup" element={!authUser ? <Signup /> : <Navigate to={"/"} />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
       </Routes>
 
       <Toaster />
