@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import BorderAnimated from "../components/BorderAnimated";
-import { LoaderIcon, MailIcon, ArrowLeft, AwardIcon, Mail, Loader } from "lucide-react";
+import { LoaderIcon, MailIcon, ArrowLeft, Mail, Loader } from "lucide-react";
 import { Link } from "react-router";
 import { useNavigate } from "react-router";
 
