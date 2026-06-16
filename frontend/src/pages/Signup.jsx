@@ -2,17 +2,23 @@ import { useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import BorderAnimated from "../components/BorderAnimated";
 import { LoaderIcon, MailIcon, MessageCircleIcon, UserIcon, LockKeyhole } from "lucide-react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 const Signup = () => {
   const [formData, setFormData] = useState({ fullName: "", email: "", password: "" });
+  const navigate = useNavigate();
 
   const { signup, isSigninUp } = useAuthStore();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    signup(formData);
+    try {
+      await signup(formData);
+      navigate("/verify-email");
+    } catch (error) {
+      console.log(error.message);
+    }
   };
   return (
     <div className="h-screen w-full flex items-center justify-center  p-4 bg-slate-900">
