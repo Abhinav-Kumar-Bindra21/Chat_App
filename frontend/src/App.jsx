@@ -10,6 +10,7 @@ import Loader from "./components/Loader";
 import { Toaster } from "react-hot-toast";
 import { ForgotPassword } from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import EmailVerificationPage from "./pages/EmailVerificationPage";
 
 const App = () => {
   const { checkAuth, isCheckingAuth, authUser } = useAuthStore();
@@ -30,6 +31,7 @@ const App = () => {
         <Route path="/" element={authUser ? <ChatPage /> : <Navigate to={"/login"} />} />
         <Route path="/login" element={!authUser ? <Login /> : <Navigate to={"/"} />} />
         <Route path="/signup" element={!authUser ? <Signup /> : <Navigate to={"/"} />} />
+        <Route path="/verify-email" element={<EmailVerificationPage />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
       </Routes>
