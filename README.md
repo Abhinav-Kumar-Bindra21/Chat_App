@@ -1,372 +1,423 @@
-# 💬 Chatify — Real-Time Chat Application
+# 📖 Project Architecture & Workflow
 
-<div align="center">
-
-### Modern Full-Stack Real-Time Messaging Platform
-
-A fast, secure, and responsive chat application built with **React**, **Node.js**, **Express**, **MongoDB**, and **Socket.IO**. Chatify enables users to communicate in real time with secure authentication, email verification, password recovery, and a modern user interface.
-
-<p align="center">
-
-![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge\&logo=react)
-
-![Vite](https://img.shields.io/badge/Vite-Frontend-646CFF?style=for-the-badge\&logo=vite)
-
-![Node.js](https://img.shields.io/badge/Node.js-Express-339933?style=for-the-badge\&logo=node.js)
-
-![MongoDB](https://img.shields.io/badge/MongoDB-Database-47A248?style=for-the-badge\&logo=mongodb)
-
-![Socket.IO](https://img.shields.io/badge/Socket.IO-Realtime-black?style=for-the-badge\&logo=socketdotio)
-
-![JWT](https://img.shields.io/badge/JWT-Authentication-000000?style=for-the-badge\&logo=jsonwebtokens)
-
-</p>
+This section explains how the application works internally, from user authentication to real-time messaging, along with the overall architecture.
 
 ---
 
-## ✨ Features
+# 🎯 Project Overview
 
-### 💬 Real-Time Messaging
+**Chat App** is a modern full-stack real-time messaging platform developed using the **MERN Stack**. The application enables users to communicate instantly through WebSockets while maintaining a secure authentication system using JWT stored in HTTP-only cookies.
 
-* Instant messaging with Socket.IO
-* Live message delivery
-* Online user detection
-* Conversation history
-* Message synchronization
+The frontend is built with **React**, **Vite**, **Tailwind CSS**, and **Zustand**, while the backend uses **Node.js**, **Express**, **MongoDB**, **Socket.IO**, and **Cloudinary** for image management.
 
-### 🔐 Secure Authentication
+The project demonstrates modern software engineering practices including:
 
-* User Registration
-* Login & Logout
-* JWT Authentication
-* HTTP-only Cookies
-* Protected Routes
-
-### 📧 Email System
-
-* Email Verification
-* Verification Code
-* Forgot Password
-* Password Reset
-* Resend Email Integration
-
-### 👤 User Experience
-
-* Responsive UI
-* Loading Skeletons
-* Notifications
-* Typing Sound Effects
-* Clean Chat Interface
-
-### ⚡ Performance
-
-* Optimized API Requests
-* Persistent Authentication
-* Efficient State Management with Zustand
-* Responsive Design
+- RESTful API development
+- Real-time communication
+- Secure authentication
+- Cloud media storage
+- State management
+- Responsive UI
+- Modular architecture
+- Production deployment
 
 ---
 
-# 🛠 Tech Stack
-
-## Frontend
-
-* React
-* Vite
-* Zustand
-* React Router
-* Axios
-* Tailwind CSS
-* React Hot Toast
-
-## Backend
-
-* Node.js
-* Express.js
-* MongoDB
-* Mongoose
-* Socket.IO
-* JWT
-* Bcrypt
-* Cookie Parser
-
-## Services
-
-* Cloudinary
-* Resend Email API
-* Arcjet Security
-
----
-
-# 📁 Project Structure
+# 🏛 System Architecture
 
 ```text
-Chatify/
+                            ┌─────────────────────────┐
+                            │      React Client       │
+                            │  React + Vite + Zustand │
+                            └────────────┬────────────┘
+                                         │
+                               Axios REST API
+                                         │
+                                         ▼
+                   ┌────────────────────────────────────┐
+                   │        Express.js Backend          │
+                   │────────────────────────────────────│
+                   │ Authentication                    │
+                   │ User Management                   │
+                   │ Message Controller                │
+                   │ Socket.IO Server                  │
+                   │ Middleware                        │
+                   └────────────┬──────────────────────┘
+                                │
+                ┌───────────────┴────────────────┐
+                ▼                                ▼
+         MongoDB Atlas                     Cloudinary
+      Users & Messages                  Profile Images
+                │
+                ▼
+           Resend API
+      Email Verification
+```
+
+---
+
+# 🚀 Complete Application Workflow
+
+```text
+                   User Opens Website
+                           │
+                           ▼
+                  Check Authentication
+                           │
+          ┌────────────────┴────────────────┐
+          │                                 │
+          ▼                                 ▼
+     Logged In                        Not Logged In
+          │                                 │
+          ▼                                 ▼
+  Redirect to Chat                 Login / Register
+          │                                 │
+          ▼                                 ▼
+ Socket.IO Connected              Email Verification
+          │                                 │
+          └────────────────┬────────────────┘
+                           ▼
+                    Start Chatting
+                           │
+                           ▼
+             Send / Receive Messages
+                           │
+                           ▼
+               MongoDB + Socket.IO
+                           │
+                           ▼
+               Real-time UI Updates
+```
+
+---
+
+# 🔐 Authentication Flow
+
+```text
+User Login
+    │
+    ▼
+Validate Credentials
+    │
+    ▼
+Compare Password (bcrypt)
+    │
+    ▼
+Generate JWT Token
+    │
+    ▼
+Store JWT in HTTP-only Cookie
+    │
+    ▼
+Browser Sends Cookie Automatically
+    │
+    ▼
+Authentication Middleware
+    │
+    ▼
+User Authorized
+```
+
+---
+
+# 📝 User Registration Flow
+
+```text
+User Registers
+      │
+      ▼
+Validate Input
+      │
+      ▼
+Check Existing User
+      │
+      ▼
+Hash Password
+      │
+      ▼
+Store User in MongoDB
+      │
+      ▼
+Generate OTP
+      │
+      ▼
+Send Verification Email
+      │
+      ▼
+User Enters OTP
+      │
+      ▼
+Account Verified
+```
+
+---
+
+# 💬 Real-Time Messaging Flow
+
+```text
+User A Sends Message
+          │
+          ▼
+Frontend API Request
+          │
+          ▼
+Express Controller
+          │
+          ▼
+Save Message in MongoDB
+          │
+          ▼
+Socket.IO Emits Event
+          │
+          ▼
+User B Receives Message
+          │
+          ▼
+React Updates Chat Instantly
+```
+
+---
+
+# 🌐 Socket.IO Communication
+
+```text
+             User A
+               │
+      Socket Connection
+               │
+               ▼
+      Express + Socket.IO
+               │
+      Store Active Users
+               │
+       ┌───────┴────────┐
+       ▼                ▼
+   User B Online   User B Offline
+       │                │
+Receive Instantly   Receive Later
+```
+
+---
+
+# 📦 Backend Request Lifecycle
+
+```text
+Client Request
+      │
+      ▼
+Express Router
+      │
+      ▼
+Authentication Middleware
+      │
+      ▼
+Validation
+      │
+      ▼
+Controller
+      │
+      ▼
+Database Query
+      │
+      ▼
+JSON Response
+```
+
+---
+
+# ☁ Image Upload Flow
+
+```text
+Choose Profile Picture
+         │
+         ▼
+React FormData
+         │
+         ▼
+Express Upload Route
+         │
+         ▼
+Cloudinary Upload
+         │
+         ▼
+Image URL Returned
+         │
+         ▼
+Store URL in MongoDB
+         │
+         ▼
+Display Updated Profile
+```
+
+---
+
+# 📧 Email Verification Flow
+
+```text
+Register
+    │
+    ▼
+Generate OTP
+    │
+    ▼
+Resend Email API
+    │
+    ▼
+Verification Email Sent
+    │
+    ▼
+User Enters OTP
+    │
+    ▼
+Verify OTP
+    │
+    ▼
+Account Activated
+```
+
+---
+
+# 🗂 Folder Structure
+
+```text
+chat-app/
 │
-├── 📁 frontend/
-│   │
-│   ├── 📁 public/
-│   │   ├── avatar.png
-│   │   ├── login.png
-│   │   ├── signup.png
-│   │   └── sounds/
-│   │
-│   ├── 📁 src/
-│   │   ├── 📁 components/
-│   │   │   ├── ChatContainer.jsx
-│   │   │   ├── ChatHeader.jsx
-│   │   │   ├── ChatsList.jsx
-│   │   │   ├── ContactList.jsx
-│   │   │   ├── Loader.jsx
-│   │   │   ├── MessageInput.jsx
-│   │   │   ├── ProfileHeader.jsx
-│   │   │   └── Skeleton Components
-│   │   │
-│   │   ├── 📁 hooks/
-│   │   │   └── useKeyboardSound.js
-│   │   │
-│   │   ├── 📁 libs/
-│   │   │   └── axios.js
-│   │   │
-│   │   ├── 📁 pages/
-│   │   │   ├── Login.jsx
-│   │   │   ├── Signup.jsx
-│   │   │   ├── ChatPage.jsx
-│   │   │   ├── ForgotPassword.jsx
-│   │   │   ├── ResetPassword.jsx
-│   │   │   └── EmailVerificationPage.jsx
-│   │   │
-│   │   ├── 📁 store/
-│   │   │   ├── useAuthStore.js
-│   │   │   └── useChatStore.js
-│   │   │
+├── frontend/
+│   ├── public/
+│   ├── src/
+│   │   ├── assets/
+│   │   ├── components/
+│   │   ├── context/
+│   │   ├── pages/
+│   │   ├── lib/
 │   │   ├── App.jsx
 │   │   └── main.jsx
-│   │
-│   ├── package.json
-│   └── vite.config.js
-│
-├── 📁 backend/
-│   │
-│   ├── 📁 src/
-│   │   ├── 📁 configs/
-│   │   │   ├── db.js
-│   │   │   ├── socket.js
-│   │   │   ├── cloudinary.js
-│   │   │   ├── resend.js
-│   │   │   └── arcjet.js
-│   │   │
-│   │   ├── 📁 controllers/
-│   │   │   ├── auth.controller.js
-│   │   │   └── message.controller.js
-│   │   │
-│   │   ├── 📁 middleware/
-│   │   │   ├── protectRoute.js
-│   │   │   ├── socketAuthMiddleware.js
-│   │   │   └── arcjet.middleware.js
-│   │   │
-│   │   ├── 📁 models/
-│   │   │   ├── User.js
-│   │   │   └── Message.js
-│   │   │
-│   │   ├── 📁 routes/
-│   │   │   ├── auth.route.js
-│   │   │   └── message.route.js
-│   │   │
-│   │   ├── 📁 emails/
-│   │   ├── 📁 utils/
-│   │   └── server.js
-│   │
 │   └── package.json
 │
-├── package.json
+├── backend/
+│   ├── configs/
+│   ├── controllers/
+│   ├── middleware/
+│   ├── models/
+│   ├── routes/
+│   ├── utils/
+│   ├── emails/
+│   ├── server.js
+│   └── package.json
+│
 └── README.md
 ```
 
 ---
 
-# 🚀 Getting Started
+# 🗄 Database Design
 
-## Clone Repository
-
-```bash
-git clone https://github.com/<your-username>/chatify.git
-
-cd chatify
-```
-
-## Install Backend
-
-```bash
-cd backend
-
-npm install
-
-npm run dev
-```
-
-## Install Frontend
-
-```bash
-cd frontend
-
-npm install
-
-npm run dev
-```
-
----
-
-# 🔑 Environment Variables
-
-### Backend
-
-```env
-PORT=
-
-MONGODB_URI=
-
-JWT_SECRET=
-
-CLIENT_URL=
-
-CLOUDINARY_CLOUD_NAME=
-
-CLOUDINARY_API_KEY=
-
-CLOUDINARY_API_SECRET=
-
-RESEND_API_KEY=
-```
-
----
-
-# 🏗 System Architecture
-
-```mermaid
-flowchart LR
-
-User --> React Frontend
-
-React Frontend --> Express API
-
-Express API --> MongoDB
-
-Express API --> Socket.IO
-
-Express API --> Cloudinary
-
-Express API --> Resend
-
-Socket.IO --> Real-Time Chat
-```
-
----
-
-# 🔄 Authentication Flow
+## User Collection
 
 ```text
-Register
-     │
-     ▼
-Email Verification
-     │
-     ▼
-Login
-     │
-     ▼
-JWT Token
-     │
-     ▼
-HTTP-only Cookie
-     │
-     ▼
-Protected Routes
+User
+├── _id
+├── fullName
+├── email
+├── password
+├── profilePicture
+├── isVerified
+├── createdAt
+└── updatedAt
+```
+
+## Message Collection
+
+```text
+Message
+├── _id
+├── senderId
+├── receiverId
+├── text
+├── image
+├── createdAt
+└── updatedAt
 ```
 
 ---
 
-# 💬 Messaging Flow
+# 🚀 Deployment Architecture
 
 ```text
-User A
+                User Browser
+                      │
+                      ▼
+                  Vercel
+             (React Frontend)
+                      │
+          HTTPS API Requests
+                      │
+                      ▼
+                  Render
+        Express + Socket.IO Server
+             │               │
+             ▼               ▼
+     MongoDB Atlas      Cloudinary
+             │
+             ▼
+         Resend API
+```
 
-↓
+---
 
-Socket.IO
+# 🛡 Security Workflow
 
-↓
-
-Express Server
-
-↓
-
+```text
+Client Request
+      │
+      ▼
+CORS Validation
+      │
+      ▼
+JWT Verification
+      │
+      ▼
+HTTP-only Cookie Check
+      │
+      ▼
+Arcjet Protection
+      │
+      ▼
+Controller
+      │
+      ▼
 MongoDB
-
-↓
-
-Socket.IO
-
-↓
-
-User B
 ```
 
 ---
 
-# 📸 Screenshots
+# ⭐ Key Features
 
-| Login          | Signup         | Chat           |
-| -------------- | -------------- | -------------- |
-| Add Screenshot | Add Screenshot | Add Screenshot |
-
----
-
-# 📌 Future Improvements
-
-* Voice Messages
-* Image Sharing
-* Video Calling
-* Group Chats
-* Emoji Reactions
-* Read Receipts
-* Message Search
-* Push Notifications
-* File Uploads
-* Dark & Light Themes
+- 🔐 JWT Authentication
+- 🍪 HTTP-only Cookie Security
+- 💬 Real-time Messaging with Socket.IO
+- ☁ Cloudinary Image Upload
+- 📧 Email Verification using Resend
+- 📱 Fully Responsive UI
+- ⚡ Zustand State Management
+- 🎨 Tailwind CSS Design
+- 🚀 MERN Stack Architecture
+- 🔒 Protected API Routes
+- 🌍 Production Ready
+- 📦 Modular Code Structure
 
 ---
 
-# 🤝 Contributing
+# 📈 Future Enhancements
 
-Contributions are welcome!
-
-1. Fork the repository.
-2. Create a feature branch.
-3. Commit your changes.
-4. Push to your branch.
-5. Open a Pull Request.
-
----
-
-# 📄 License
-
-This project is licensed under the MIT License.
-
----
-
-# 👨‍💻 Author
-
-**Abhinav Kumar Bindra**
-
-Feel free to connect, contribute, or open an issue if you have ideas for improving the project.
-
----
-
-<div align="center">
-
-### ⭐ If you like this project, consider giving it a star!
-
-**Built with ❤️ using React, Express, MongoDB & Socket.IO**
-
-</div>
+- ✅ Group Chats
+- ✅ Typing Indicators
+- ✅ Read Receipts
+- ✅ Voice Messages
+- ✅ Video Calling
+- ✅ Emoji Reactions
+- ✅ Message Search
+- ✅ Push Notifications
+- ✅ File Sharing
+- ✅ Dark Mode
+- ✅ Chat Backup & Restore
