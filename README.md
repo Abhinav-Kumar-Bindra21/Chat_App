@@ -23,38 +23,7 @@ The project demonstrates modern software engineering practices including:
 
 ---
 
-# 🏛 System Architecture
 
-```text
-                            ┌─────────────────────────┐
-                            │      React Client       │
-                            │  React + Vite + Zustand │
-                            └────────────┬────────────┘
-                                         │
-                               Axios REST API
-                                         │
-                                         ▼
-                   ┌────────────────────────────────────┐
-                   │        Express.js Backend          │
-                   │────────────────────────────────────│
-                   │ Authentication                    │
-                   │ User Management                   │
-                   │ Message Controller                │
-                   │ Socket.IO Server                  │
-                   │ Middleware                        │
-                   └────────────┬──────────────────────┘
-                                │
-                ┌───────────────┴────────────────┐
-                ▼                                ▼
-         MongoDB Atlas                     Cloudinary
-      Users & Messages                  Profile Images
-                │
-                ▼
-           Resend API
-      Email Verification
-```
-
----
 
 # 🚀 Complete Application Workflow
 
@@ -307,39 +276,6 @@ chat-app/
 │
 └── README.md
 ```
-
----
-
-# 🗄 Database Design
-
-## User Collection
-
-```text
-User
-├── _id
-├── fullName
-├── email
-├── password
-├── profilePicture
-├── isVerified
-├── createdAt
-└── updatedAt
-```
-
-## Message Collection
-
-```text
-Message
-├── _id
-├── senderId
-├── receiverId
-├── text
-├── image
-├── createdAt
-└── updatedAt
-```
-
----
 
 # 🚀 Deployment Architecture
 
